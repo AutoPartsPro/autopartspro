@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoParts Pro — оригинальные автозапчасти и автомобили с пробегом</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0b0d12;--bg-2:#11151d;--card:#151a24;--card-hover:#1a2030;--line:#232a38;--text:#e9edf5;--muted:#8a93a8;--accent:#ff6a1a;--accent-2:#ffb020;--radius:16px}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
+img{display:block;max-width:100%}
+.container{max-width:1280px;margin:0 auto;padding:0 20px}
+.header{position:sticky;top:0;z-index:200;background:rgba(11,13,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.header-inner{display:flex;align-items:center;gap:20px;height:70px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.5px;user-select:none;text-decoration:none;color:var(--text)}
+.logo-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-size:19px;box-shadow:0 6px 18px -6px rgba(255,106,26,.8)}
+.logo b{color:var(--accent)}
+.nav{display:flex;gap:4px;margin-left:8px}
+.nav button{padding:9px 16px;border-radius:10px;font-size:14px;font-weight:600;color:var(--muted);transition:.2s}
+.nav button:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.nav button.active{color:#12161f;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 6px 18px -8px rgba(255,106,26,.9)}
+.cart-btn{margin-left:auto;display:flex;align-items:center;gap:9px;padding:10px 18px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-weight:600;font-size:14px;transition:.2s;position:relative}
+.cart-btn:hover{border-color:var(--accent);background:var(--card-hover)}
+.cart-badge{min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--accent);color:#fff;font-size:12px;display:none;place-items:center;font-weight:700}
+.hero{position:relative;overflow:hidden;padding:70px 0 60px;text-align:center}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(700px 340px at 50% -10%,rgba(255,106,26,.22),transparent 70%),radial-gradient(600px 300px at 88% 25%,rgba(255,176,32,.10),transparent 70%)}
+.hero h1{font-size:clamp(30px,5vw,50px);font-weight:800;letter-spacing:-1.6px;line-height:1.08;position:relative}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:18px auto 0;max-width:620px;color:var(--muted);font-size:16px;line-height:1.6;position:relative}
+.hero-stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:32px;position:relative}
+.stat{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:14px;padding:14px 24px;min-width:130px}
+.stat b{display:block;font-size:21px;font-weight:800;letter-spacing:-.6px;background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:12px;color:var(--muted);font-weight:500}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.section-head h2{font-size:23px;font-weight:800;letter-spacing:-.7px}
+.section-head .count{color:var(--muted);font-size:13.5px}
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:26px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.field{flex:1 1 160px;min-width:135px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+.field input,.field select{width:100%;padding:11px 13px;border-radius:10px;background:var(--bg-2);border:1px solid var(--line);color:var(--text);font-size:14px;outline:none;transition:.2s}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,106,26,.12)}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238a93a8' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s,border-color .25s;animation:fade .35s ease;cursor:pointer}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-4px);border-color:#33405a;box-shadow:0 18px 44px -18px rgba(0,0,0,.85)}
+.card-media{height:168px;position:relative;overflow:hidden;background:#0e1219}
+.card-media img{width:100%;height:100%;object-fit:cover;transition:transform .45s}
+.card:hover .card-media img{transform:scale(1.06)}
+.card-tag{position:absolute;top:10px;left:10px;z-index:2;padding:4px 9px;border-radius:7px;font-size:10px;font-weight:700;letter-spacing:.5px;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.13);text-transform:uppercase;color:#dfe6f5}
+.card-tag.order{color:#ffcf7a;border-color:rgba(255,176,32,.3)}
+.card-tag.original{background:rgba(52,211,153,.85);color:#04121c;border-color:transparent;left:auto;right:10px}
+.card-view{position:absolute;inset:0;z-index:1;display:grid;place-items:center;background:rgba(11,13,18,.55);opacity:0;transition:.25s;font-size:13px;font-weight:700;letter-spacing:.3px}
+.card:hover .card-view{opacity:1}
+.card-view span{background:rgba(255,255,255,.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);padding:9px 16px;border-radius:10px}
+.card-body{padding:14px;display:flex;flex-direction:column;gap:5px;flex:1}
+.card-brand{font-size:11px;font-weight:800;color:var(--accent-2);letter-spacing:.6px;text-transform:uppercase}
+.card-name{font-size:14.5px;font-weight:600;line-height:1.35;min-height:39px}
+.card-meta{font-size:11.5px;color:var(--muted)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:12px}
+.card-price{font-size:17px;font-weight:800;letter-spacing:-.6px;white-space:nowrap}
+.add-btn{padding:9px 14px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#12161f;font-weight:800;font-size:12.5px;transition:.18s;white-space:nowrap}
+.add-btn:hover{filter:brightness(1.12);transform:scale(1.04)}
+.add-btn:active{transform:scale(.97)}
+.load-more{display:block;margin:32px auto 0;padding:14px 40px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:14px;transition:.2s}
+.load-more:hover{border-color:var(--accent);color:var(--accent)}
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);font-size:15px}
+.product-page{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;padding-bottom:20px}
+.product-gallery{position:sticky;top:90px}
+.product-main-img{width:100%;aspect-ratio:4/3;border-radius:var(--radius);overflow:hidden;background:#0e1219;border:1px solid var(--line)}
+.product-main-img img{width:100%;height:100%;object-fit:cover}
+.product-badge{display:inline-block;margin-top:14px;padding:6px 12px;border-radius:8px;font-size:11.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.product-badge.in{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#6ee7b7}
+.product-badge.order{background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.3);color:#ffcf7a}
+.product-info h1{font-size:clamp(22px,3.2vw,32px);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:10px}
+.product-cat{font-size:12px;font-weight:800;color:var(--accent-2);letter-spacing:.7px;text-transform:uppercase;margin-bottom:8px}
+.product-art{font-size:13px;color:var(--muted);margin-bottom:18px}
+.product-price{font-size:34px;font-weight:800;letter-spacing:-1.4px;margin-bottom:4px}
+.product-price-old{font-size:15px;color:var(--muted);text-decoration:line-through;margin-bottom:18px}
+.product-desc{font-size:14px;color:#b9c2d6;line-height:1.65;margin-bottom:22px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:13px}
+.product-specs{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:22px}
+.spec-row{display:flex;justify-content:space-between;gap:16px;padding:11px 16px;font-size:13.5px;border-bottom:1px solid var(--line)}
+.spec-row:last-child{border-bottom:none}
+.spec-row span{color:var(--muted)}
+.spec-row b{font-weight:600;text-align:right}
+.product-actions{display:flex;gap:12px;align-items:stretch;margin-bottom:12px}
+.product-qty{display:flex;align-items:center;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px}
+.product-qty button{width:40px;height:40px;border-radius:9px;display:grid;place-items:center;font-size:18px;font-weight:700;color:var(--muted);transition:.15s}
+.product-qty button:hover{background:rgba(255,255,255,.08);color:#fff}
+.product-qty span{min-width:40px;text-align:center;font-size:15px;font-weight:800}
+.buy-btn{flex:1;padding:14px 24px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#12161f;font-weight:800;font-size:15px;transition:.2s}
+.buy-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.tg-note{display:flex;gap:10px;background:rgba(41,182,246,.08);border:1px solid rgba(41,182,246,.25);border-radius:11px;padding:14px;font-size:12.5px;color:#a8d8f0;line-height:1.55}
+.tg-note span{font-size:16px;flex-shrink:0}
+.back-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;background:var(--card);border:1px solid var(--line);font-size:13.5px;font-weight:600;margin-bottom:22px;transition:.2s}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+.cars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.car-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.25s;display:flex;flex-direction:column;animation:fade .35s ease;cursor:pointer}
+.car-card:hover{transform:translateY(-4px);border-color:#33405a;box-shadow:0 18px 44px -18px rgba(0,0,0,.85)}
+.car-media{position:relative;height:190px;overflow:hidden;background:#0e1219}
+.car-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.car-card:hover .car-media img{transform:scale(1.05)}
+.car-year{position:absolute;top:12px;right:12px;z-index:2;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:800;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14)}
+.car-body{padding:16px;display:flex;flex-direction:column;gap:9px;flex:1}
+.car-title{font-size:16.5px;font-weight:800;letter-spacing:-.4px}
+.car-specs{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11.5px;padding:4px 9px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:#b9c2d6;font-weight:600}
+.car-note{font-size:12.5px;color:var(--muted);line-height:1.45;min-height:36px}
+.car-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:8px}
+.car-price{font-size:19px;font-weight:800;letter-spacing:-.7px;color:#fff}
+.car-btn{padding:10px 16px;border-radius:10px;background:linear-gradient(135deg,#29b6f6,#0d8bd9);color:#04121c;font-weight:800;font-size:12.5px;transition:.2s}
+.car-btn:hover{filter:brightness(1.12);transform:scale(1.04)}
+.cart-page{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start;padding-bottom:20px}
+.cart-list{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.cart-list-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.cart-list-head h3{font-size:16px;font-weight:800}
+.cart-list-head span{font-size:13px;color:var(--muted)}
+.cart-rows{display:flex;flex-direction:column}
+.cart-row{display:flex;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);align-items:center}
+.cart-row:last-child{border-bottom:none}
+.cart-row-img{width:84px;height:84px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#0e1219;cursor:pointer}
+.cart-row-img img{width:100%;height:100%;object-fit:cover}
+.cart-row-info{flex:1;min-width:0}
+.cart-row-brand{font-size:10.5px;font-weight:800;color:var(--accent-2);letter-spacing:.5px;text-transform:uppercase}
+.cart-row-name{font-size:14.5px;font-weight:600;line-height:1.35;margin:3px 0 4px;cursor:pointer;transition:.15s}
+.cart-row-name:hover{color:var(--accent)}
+.cart-row-meta{font-size:11.5px;color:var(--muted)}
+.cart-row-controls{display:flex;align-items:center;gap:14px;margin-top:10px}
+.qty-box{display:flex;align-items:center;gap:2px;background:var(--bg-2);border:1px solid var(--line);border-radius:9px;padding:3px}
+.qty-box button{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:15px;font-weight:700;color:var(--muted);transition:.15s}
+.qty-box button:hover{background:rgba(255,255,255,.08);color:#fff}
+.qty-box span{min-width:26px;text-align:center;font-size:13.5px;font-weight:700}
+.cart-row-remove{font-size:12.5px;color:#ff6b6b;font-weight:600;padding:6px 10px;border-radius:8px;transition:.15s}
+.cart-row-remove:hover{background:rgba(255,107,107,.12)}
+.cart-row-price{font-size:16px;font-weight:800;white-space:nowrap;text-align:right}
+.cart-row-price small{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-top:2px}
+.cart-summary{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:sticky;top:90px}
+.cart-summary h3{font-size:16px;font-weight:800;margin-bottom:16px}
+.summary-line{display:flex;justify-content:space-between;font-size:13.5px;padding:7px 0;color:var(--muted)}
+.summary-line b{color:var(--text);font-weight:600}
+.summary-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px;margin-top:10px;border-top:1px solid var(--line)}
+.summary-total span{font-size:14px;color:var(--muted)}
+.summary-total b{font-size:24px;font-weight:800;letter-spacing:-.8px}
+.checkout-btn{width:100%;margin-top:18px;padding:15px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#12161f;font-weight:800;font-size:15px;transition:.2s}
+.checkout-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.checkout-hint{text-align:center;font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+.cart-empty{padding:70px 20px;text-align:center;color:var(--muted);grid-column:1/-1;background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
+.cart-empty div{font-size:52px;margin-bottom:14px;opacity:.35}
+.cart-empty h3{color:var(--text);font-size:17px;margin-bottom:8px}
+.cart-empty a{display:inline-block;margin-top:18px;padding:12px 26px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#12161f;font-weight:800;font-size:13.5px;text-decoration:none;cursor:pointer}
+.checkout-grid{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+.form-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.form-card h3{font-size:17px;font-weight:800;margin-bottom:6px}
+.form-card .sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-row.full{grid-template-columns:1fr}
+.form-field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px}
+.form-field input,.form-field textarea,.form-field select{width:100%;padding:12px 14px;border-radius:10px;background:var(--bg-2);border:1px solid var(--line);color:var(--text);font-size:14px;outline:none;transition:.2s}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,106,26,.12)}
+.form-field textarea{resize:vertical;min-height:90px}
+.form-note{display:flex;gap:10px;background:rgba(41,182,246,.08);border:1px solid rgba(41,182,246,.25);border-radius:11px;padding:14px;font-size:12.5px;color:#a8d8f0;line-height:1.55;margin-top:8px}
+.form-note span{font-size:16px;flex-shrink:0}
+.place-order{width:100%;margin-top:18px;padding:16px;border-radius:12px;background:linear-gradient(135deg,#29b6f6,#0d8bd9);color:#04121c;font-weight:800;font-size:15px;transition:.2s;display:flex;align-items:center;justify-content:center;gap:9px}
+.place-order:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.mini-list{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;max-height:280px;overflow-y:auto}
+.mini-item{display:flex;gap:10px;align-items:center}
+.mini-item img{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.mini-item-info{flex:1;min-width:0}
+.mini-item-name{font-size:12.5px;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.mini-item-qty{font-size:11px;color:var(--muted);margin-top:2px}
+.mini-item-price{font-size:12.5px;font-weight:700;white-space:nowrap}
+.modal-wrap{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:.25s}
+.modal-wrap.show{opacity:1;pointer-events:auto}
+.modal{width:min(560px,100%);background:var(--bg-2);border:1px solid var(--line);border-radius:18px;padding:26px;position:relative;transform:scale(.95);transition:.25s;max-height:88vh;overflow-y:auto}
+.modal-wrap.show .modal{transform:scale(1)}
+.modal h3{font-size:20px;font-weight:800;letter-spacing:-.6px;margin-bottom:8px;padding-right:36px}
+.modal-sub{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px}
+.modal textarea{width:100%;height:180px;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--text);font-size:13px;line-height:1.6;outline:none}
+.modal textarea:focus{border-color:var(--accent)}
+.modal-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn-ghost{flex:1;padding:13px;border-radius:11px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-weight:700;font-size:13.5px;transition:.2s;min-width:140px}
+.btn-ghost:hover{background:rgba(255,255,255,.11)}
+.btn-primary{flex:1;padding:13px;border-radius:11px;background:linear-gradient(135deg,#29b6f6,#0d8bd9);color:#04121c;font-weight:800;font-size:13.5px;text-align:center;text-decoration:none;transition:.2s;min-width:140px;display:inline-block}
+.btn-primary:hover{filter:brightness(1.1)}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.06);display:grid;place-items:center;color:var(--muted);font-size:14px;transition:.2s}
+.modal-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.modal-img{width:100%;height:200px;border-radius:12px;margin-bottom:16px;overflow:hidden;background:#0e1219}
+.modal-img img{width:100%;height:100%;object-fit:cover}
+.info-line{display:flex;justify-content:space-between;font-size:13.5px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.info-line:last-of-type{border:none}
+.info-line span{color:var(--muted)}
+.info-line b{font-weight:700}
+.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(52,211,153,.12);border:2px solid rgba(52,211,153,.4);display:grid;place-items:center;font-size:30px;margin:0 auto 18px}
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,120%);background:#1d2534;border:1px solid var(--line);border-left:3px solid var(--accent);padding:13px 22px;border-radius:12px;font-size:13.5px;font-weight:600;z-index:600;transition:transform .35s cubic-bezier(.34,1.4,.64,1);box-shadow:0 18px 40px -14px rgba(0,0,0,.9);white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.toast.show{transform:translate(-50%,0)}
+.footer{margin-top:70px;border-top:1px solid var(--line);background:var(--bg-2);padding:42px 0 34px}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:30px}
+.footer h4{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:12px;font-weight:800}
+.footer p,.footer a{font-size:13.5px;color:#a7b0c4;line-height:1.8;text-decoration:none;display:block;transition:.2s}
+.footer a:hover{color:var(--accent)}
+.footer-bottom{margin-top:32px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:#5e6779;text-align:center}
+@media (max-width:960px){.cart-page,.checkout-grid{grid-template-columns:1fr}.cart-summary{position:static}.product-page{grid-template-columns:1fr;gap:22px}.product-gallery{position:static}}
+@media (max-width:860px){
+.header-inner{height:62px;gap:12px}.logo{font-size:16px}.logo-mark{width:34px;height:34px;font-size:17px}
+.nav{position:fixed;bottom:0;left:0;right:0;margin:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(17,21,29,.97);backdrop-filter:blur(16px);border-top:1px solid var(--line);justify-content:center;z-index:250;gap:6px}
+.nav button{flex:1;text-align:center;font-size:12px;padding:10px 4px}
+body{padding-bottom:70px}.cart-label{display:none}.hero{padding:46px 0 40px}
+.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.card-media{height:130px}.card-name{font-size:13px;min-height:35px}.card-price{font-size:15px}.add-btn{font-size:11.5px;padding:8px 11px}
+.cars-grid{grid-template-columns:1fr}
+.cart-row{flex-wrap:wrap;gap:12px}.cart-row-img{width:64px;height:64px}
+.cart-row-price{width:100%;text-align:left;padding-left:80px;margin-top:-8px}
+.form-row{grid-template-columns:1fr}.product-price{font-size:28px}
+}
+@media (max-width:400px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="#" class="logo" onclick="switchTab('parts');return false;">
+      <div class="logo-mark">🔧</div>
+      <div>Auto<b>Parts</b> Pro</div>
+    </a>
+    <nav class="nav">
+      <button data-tab="parts" class="active">Запчасти</button>
+      <button data-tab="cars">Б/У авто</button>
+      <button data-tab="cart">Корзина</button>
+      <button data-tab="contacts">Контакты</button>
+    </nav>
+    <button class="cart-btn" id="header-cart">
+      🛒 <span class="cart-label">Корзина</span>
+      <span class="cart-badge" id="cart-badge">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="container">
+    <h1>Оригинальные запчасти<br>и <em>автомобили с пробегом</em></h1>
+    <p>Только оригинальные детали от производителя. Более 30 марок, тысячи артикулов в наличии. Оптика, кузов, двигатель, тюнинг — и проверенные б/у автомобили до 600 000 ₽.</p>
+    <div class="hero-stats">
+      <div class="stat"><b id="stat-parts">0</b><span>позиций в каталоге</span></div>
+      <div class="stat"><b>100%</b><span>оригинал</span></div>
+      <div class="stat"><b id="stat-cars">0</b><span>авто в наличии</span></div>
+    </div>
+  </div>
+</section>
+
+<main class="container" id="view-parts">
+  <div class="section-head">
+    <h2>Каталог оригинальных запчастей</h2>
+    <div class="count">Найдено: <b id="parts-count">0</b></div>
+  </div>
+  <div class="filters">
+    <div class="field"><label>Поиск</label><input type="text" id="f-search" placeholder="Название или артикул…"></div>
+    <div class="field"><label>Марка</label><select id="f-brand"><option value="all">Все марки</option></select></div>
+    <div class="field"><label>Модель</label><select id="f-model"><option value="all">Все модели</option></select></div>
+    <div class="field"><label>Категория</label><select id="f-category"><option value="all">Все категории</option></select></div>
+    <div class="field"><label>Сортировка</label><select id="f-sort">
+      <option value="popular">По популярности</option>
+      <option value="price-asc">Сначала дешёвые</option>
+      <option value="price-desc">Сначала дорогие</option>
+      <option value="name">По названию</option>
+    </select></div>
+  </div>
+  <div class="grid" id="parts-grid"></div>
+  <button class="load-more" id="load-more">Показать ещё</button>
+</main>
+
+<main class="container" id="view-product" style="display:none">
+  <button class="back-btn" onclick="switchTab('parts')">← Назад в каталог</button>
+  <div id="product-body"></div>
+</main>
+
+<main class="container" id="view-cars" style="display:none">
+  <div class="section-head">
+    <h2>Автомобили с пробегом до 600 000 ₽</h2>
+    <div class="count">Все авто проверены и с документами</div>
+  </div>
+  <div class="cars-grid" id="cars-grid"></div>
+</main>
+
+<main class="container" id="view-cart" style="display:none">
+  <div class="section-head"><h2>Корзина</h2><div class="count" id="cart-count-label"></div></div>
+  <div id="cart-page-body"></div>
+</main>
+
+<main class="container" id="view-contacts" style="display:none">
+  <div class="section-head"><h2>Контакты</h2></div>
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;max-width:640px">
+    <p style="color:var(--muted);line-height:1.7;font-size:14.5px;margin-bottom:20px">
+      Все заказы оформляются через менеджера в Telegram — он подтвердит наличие, актуальную цену и сроки доставки.
+    </p>
+    <div class="info-line"><span>Telegram</span><b id="c-tg">—</b></div>
+    <div class="info-line"><span>График</span><b>Ежедневно, 09:00 — 21:00</b></div>
+    <div class="info-line"><span>Доставка</span><b>По всей России, 1–5 дней</b></div>
+    <div style="margin-top:22px">
+      <a class="btn-primary" id="c-link" href="#" target="_blank" rel="noopener" style="display:inline-block;flex:none;padding:14px 28px">Написать в Telegram</a>
+    </div>
+  </div>
+</main>
+
+<div class="modal-wrap" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:12px"><div class="logo-mark">🔧</div><div>Auto<b>Parts</b> Pro</div></div>
+        <p>Только оригинальные запчасти, тюнинг и автомобили с пробегом.</p>
+      </div>
+      <div>
+        <h4>Каталог</h4>
+        <a href="#" data-jump="parts">Запчасти</a>
+        <a href="#" data-jump="cars">Б/У автомобили</a>
+        <a href="#" data-jump="cart">Корзина</a>
+        <a href="#" data-jump="contacts">Контакты</a>
+      </div>
+      <div>
+        <h4>Связь</h4>
+        <a id="f-tg" href="#" target="_blank" rel="noopener">Telegram-менеджер</a>
+        <p>Ежедневно 09:00 — 21:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 AutoParts Pro. Демо-проект. Все цены указаны для примера.</div>
+  </div>
+</footer>
+
+<script>
+const CONFIG = {
+  telegram: 'https://t.me/AutoPartsPro_manager',
+  telegramName: '@AutoPartsPro_manager'
+};
+const DISCOUNT = 0.85;
+
+const BRANDS = [
+  {n:'Toyota',tier:1.00,models:['Corolla','Camry','RAV4','Land Cruiser','Highlander']},
+  {n:'BMW',tier:1.40,models:['3 Series','5 Series','7 Series','X3','X5']},
+  {n:'Mercedes-Benz',tier:1.45,models:['C-Class','E-Class','S-Class','GLC','GLE']},
+  {n:'Audi',tier:1.35,models:['A4','A6','A8','Q5','Q7']},
+  {n:'Volkswagen',tier:1.05,models:['Polo','Golf','Passat','Tiguan','Touareg']},
+  {n:'Lada',tier:0.58,models:['Granta','Vesta','Niva','Largus','XRAY']},
+  {n:'Kia',tier:0.85,models:['Rio','Sportage','Ceed','Sorento','K5']},
+  {n:'Hyundai',tier:0.85,models:['Solaris','Creta','Tucson','Santa Fe','Elantra']},
+  {n:'Nissan',tier:0.95,models:['Almera','Qashqai','X-Trail','Juke','Murano']},
+  {n:'Renault',tier:0.78,models:['Logan','Duster','Sandero','Arkana','Kaptur']},
+  {n:'Ford',tier:0.95,models:['Focus','Fiesta','Mondeo','Kuga','Explorer']},
+  {n:'Chevrolet',tier:0.90,models:['Cruze','Aveo','Lacetti','Captiva','Niva']},
+  {n:'Skoda',tier:0.90,models:['Fabia','Octavia','Superb','Kodiaq','Rapid']},
+  {n:'Mazda',tier:1.00,models:['3','6','CX-5','CX-9','MX-5']},
+  {n:'Mitsubishi',tier:0.95,models:['Lancer','Outlander','ASX','Pajero','Eclipse Cross']},
+  {n:'Subaru',tier:1.05,models:['Impreza','Legacy','Forester','Outback','XV']},
+  {n:'Honda',tier:1.00,models:['Civic','Accord','CR-V','HR-V','Pilot']},
+  {n:'Lexus',tier:1.50,models:['ES','GS','LS','NX','RX']},
+  {n:'Land Rover',tier:1.60,models:['Discovery','Range Rover','Freelander','Defender','Velar']},
+  {n:'Porsche',tier:1.95,models:['911','Cayenne','Macan','Panamera','Taycan']},
+  {n:'Volvo',tier:1.30,models:['S60','S90','XC40','XC60','XC90']},
+  {n:'Peugeot',tier:0.84,models:['208','308','408','3008','5008']},
+  {n:'Citroen',tier:0.80,models:['C3','C4','C5','Berlingo','C5 Aircross']},
+  {n:'Opel',tier:0.80,models:['Astra','Corsa','Insignia','Mokka','Zafira']},
+  {n:'Suzuki',tier:0.85,models:['Swift','Vitara','SX4','Jimny','Grand Vitara']},
+  {n:'UAZ',tier:0.55,models:['Patriot','Hunter','Profi','Bukhanka']},
+  {n:'GAZ',tier:0.60,models:['Gazelle','Sobol','Next','Valdai']},
+  {n:'Tesla',tier:1.75,models:['Model S','Model 3','Model X','Model Y']},
+  {n:'Jeep',tier:1.25,models:['Grand Cherokee','Wrangler','Compass','Renegade']},
+  {n:'Dodge',tier:1.20,models:['Charger','Challenger','Durango','Journey']}
+];
+
+const CATALOG = [
+  {id:'engine',name:'Двигатель',parts:[{n:'Поршневая группа',p:[25000,90000]},{n:'Комплект ГРМ',p:[12000,45000]},{n:'Турбокомпрессор',p:[55000,240000]},{n:'Масляный насос',p:[6000,22000]},{n:'Прокладка ГБЦ',p:[2500,12000]},{n:'Топливная форсунка',p:[4500,28000]},{n:'Радиатор охлаждения',p:[7000,35000]}]},
+  {id:'brakes',name:'Тормозная система',parts:[{n:'Колодки тормозные передние',p:[2800,18000]},{n:'Диски тормозные',p:[4500,32000]},{n:'Суппорт тормозной',p:[9000,48000]},{n:'Тормозные шланги',p:[1200,6500]},{n:'Главный тормозной цилиндр',p:[5500,24000]}]},
+  {id:'suspension',name:'Подвеска',parts:[{n:'Амортизатор',p:[4500,32000]},{n:'Пружины подвески',p:[3500,18000]},{n:'Рычаг передний',p:[4000,26000]},{n:'Ступица колеса',p:[3800,22000]},{n:'Шаровая опора',p:[1500,9000]},{n:'Стойка стабилизатора',p:[900,5500]}]},
+  {id:'lights',name:'Оптика',parts:[{n:'Фара передняя LED',p:[35000,180000]},{n:'Фара задняя',p:[18000,85000]},{n:'Противотуманная фара',p:[4500,22000]},{n:'Фонарь задний диодный',p:[12000,60000]},{n:'Блок розжига ксенона',p:[5500,24000]}]},
+  {id:'body',name:'Кузов',parts:[{n:'Бампер передний',p:[15000,120000]},{n:'Бампер задний',p:[14000,110000]},{n:'Капот',p:[22000,150000]},{n:'Крыло переднее',p:[9000,55000]},{n:'Дверь в сборе',p:[25000,140000]},{n:'Зеркало боковое',p:[4500,32000]},{n:'Решётка радиатора',p:[5500,38000]},{n:'Порог кузовной',p:[3000,15000]}]},
+  {id:'interior',name:'Салон',parts:[{n:'Сиденье переднее',p:[25000,180000]},{n:'Руль',p:[12000,75000]},{n:'Панель приборов',p:[18000,95000]},{n:'Комплект ковриков',p:[2500,12000]},{n:'Центральная консоль',p:[8000,45000]}]},
+  {id:'electric',name:'Электрика',parts:[{n:'Аккумулятор',p:[5500,28000]},{n:'Стартер',p:[8000,38000]},{n:'Генератор',p:[9500,45000]},{n:'Блок управления двигателем',p:[18000,110000]},{n:'Датчик кислорода',p:[3500,15000]}]},
+  {id:'tuning',name:'Тюнинг',parts:[{n:'Обвес body kit',p:[45000,280000]},{n:'Спойлер',p:[8000,55000]},{n:'Выхлопная система Sport',p:[25000,190000]},{n:'Литые диски R18',p:[30000,160000]},{n:'Подсветка салона',p:[2500,12000]}]},
+  {id:'consumables',name:'Расходники',parts:[{n:'Масло моторное 5 л',p:[2500,9500]},{n:'Фильтр масляный',p:[450,3200]},{n:'Фильтр воздушный',p:[700,4500]},{n:'Свечи зажигания (4 шт)',p:[1200,8500]},{n:'Тормозная жидкость',p:[600,2500]}]},
+  {id:'wheels',name:'Колёса',parts:[{n:'Шины летние R18',p:[8000,35000]},{n:'Шины зимние R17',p:[7500,32000]},{n:'Диски стальные R16',p:[4500,15000]},{n:'Колпаки на диски',p:[900,4500]}]}
+];
+
+const PALETTE = {
+  engine:{bg1:'#1c2a3f',bg2:'#0c1119',accent:'#4a90d9'},
+  brakes:{bg1:'#3f1c1c',bg2:'#190c0c',accent:'#e05252'},
+  suspension:{bg1:'#1c3f2d',bg2:'#0c1912',accent:'#52c97a'},
+  lights:{bg1:'#3f3a1c',bg2:'#19170c',accent:'#f0c040'},
+  body:{bg1:'#2a1c3f',bg2:'#120c19',accent:'#a052d9'},
+  interior:{bg1:'#3f2a1c',bg2:'#19120c',accent:'#d98852'},
+  electric:{bg1:'#1c3f3d',bg2:'#0c1918',accent:'#40d9d0'},
+  tuning:{bg1:'#3f1c2d',bg2:'#190c12',accent:'#e052a0'},
+  consumables:{bg1:'#2a2a1c',bg2:'#12120c',accent:'#b8c940'},
+  wheels:{bg1:'#1c243f',bg2:'#0c0f19',accent:'#5288e0'}
+};
+
+function partSVG(cat,w,h){
+  const p=PALETTE[cat]||PALETTE.engine;
+  const labels={engine:'ДВИГАТЕЛЬ',brakes:'ТОРМОЗА',suspension:'ПОДВЕСКА',lights:'ОПТИКА',body:'КУЗОВ',interior:'САЛОН',electric:'ЭЛЕКТРИКА',tuning:'ТЮНИНГ',consumables:'РАСХОДНИКИ',wheels:'КОЛЁСА'};
+  const icons={engine:'⚙️',brakes:'🛑',suspension:'🔧',lights:'💡',body:'🚗',interior:'💺',electric:'🔋',tuning:'🏁',consumables:'🛢️',wheels:'🛞'};
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${p.bg1}"/><stop offset="1" stop-color="${p.bg2}"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="50%"><stop offset="0" stop-color="${p.accent}" stop-opacity="0.28"/><stop offset="1" stop-color="${p.accent}" stop-opacity="0"/></radialGradient></defs>
+    <rect width="${w}" height="${h}" fill="url(#bg)"/><rect width="${w}" height="${h}" fill="url(#glow)"/>
+    <text x="${w/2}" y="${h*0.44}" font-size="${Math.min(w,h)*0.38}" text-anchor="middle" dominant-baseline="middle">${icons[cat]}</text>
+    <text x="${w/2}" y="${h*0.88}" font-family="Inter, sans-serif" font-size="${Math.max(11,Math.min(w,h)*0.07)}" font-weight="800" fill="${p.accent}" text-anchor="middle" letter-spacing="3" opacity="0.95">${labels[cat]}</text>
+    <text x="${w/2}" y="${h*0.96}" font-family="Inter, sans-serif" font-size="${Math.max(9,Math.min(w,h)*0.045)}" font-weight="600" fill="#8a93a8" text-anchor="middle" letter-spacing="2">ORIGINAL PART</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+
+function carFallbackSVG(w,h,color,name){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <defs><linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a2233"/><stop offset="1" stop-color="#0c1119"/></linearGradient>
+    <radialGradient id="cglow" cx="50%" cy="65%" r="55%"><stop offset="0" stop-color="${color}" stop-opacity="0.4"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></radialGradient></defs>
+    <rect width="${w}" height="${h}" fill="url(#cbg)"/><rect width="${w}" height="${h}" fill="url(#cglow)"/>
+    <line x1="0" y1="${h*0.82}" x2="${w}" y2="${h*0.82}" stroke="#2a3345" stroke-width="2"/>
+    <line x1="${w*0.08}" y1="${h*0.82}" x2="${w*0.2}" y2="${h*0.82}" stroke="${color}" stroke-width="3" opacity="0.6"/>
+    <line x1="${w*0.8}" y1="${h*0.82}" x2="${w*0.92}" y2="${h*0.82}" stroke="${color}" stroke-width="3" opacity="0.6"/>
+    <g transform="translate(${w/2}, ${h*0.64}) scale(${Math.min(w,h)/260})">
+      <path d="M-95 10 C-95 -2 -88 -10 -76 -13 L-52 -18 L-28 -40 C-22 -46 -14 -50 -6 -50 L38 -50 C47 -50 55 -46 60 -39 L76 -18 L94 -13 C102 -11 106 -5 106 6 L106 16 C106 21 102 25 97 25 L-86 25 C-91 25 -95 21 -95 16 Z" fill="${color}" stroke="${color}" stroke-width="2"/>
+      <path d="M-26 -38 L-10 -38 L-10 -18 L-42 -18 Z" fill="#0b0d12" opacity="0.75"/>
+      <path d="M-2 -38 L14 -38 C20 -38 25 -35 28 -30 L38 -18 L-2 -18 Z" fill="#0b0d12" opacity="0.75"/>
+      <path d="M42 -18 L58 -18 L52 -36 C50 -41 46 -43 42 -43 Z" fill="#0b0d12" opacity="0.6"/>
+      <circle cx="-62" cy="28" r="18" fill="#0b0d12"/><circle cx="-62" cy="28" r="8" fill="#2a3345"/><circle cx="-62" cy="28" r="2.5" fill="${color}"/>
+      <circle cx="62" cy="28" r="18" fill="#0b0d12"/><circle cx="62" cy="28" r="8" fill="#2a3345"/><circle cx="62" cy="28" r="2.5" fill="${color}"/>
+      <ellipse cx="-88" cy="-4" rx="5" ry="3.5" fill="#fff" opacity="0.9"/>
+      <ellipse cx="100" cy="-4" rx="4" ry="3" fill="#ff4444" opacity="0.85"/>
+    </g>
+    <text x="${w/2}" y="${h*0.92}" font-family="Inter, sans-serif" font-size="${Math.max(11,Math.min(w,h)*0.055)}" font-weight="800" fill="${color}" text-anchor="middle" letter-spacing="1">${(name||'').toUpperCase()}</text>
+    <text x="${w/2}" y="${h*0.97}" font-family="Inter, sans-serif" font-size="${Math.max(9,Math.min(w,h)*0.035)}" font-weight="600" fill="#8a93a8" text-anchor="middle" letter-spacing="2">USED CAR · ДО 600 000 ₽</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+
+const SVG_CACHE={};
+function getPartImg(cat,w,h){const k=cat+'_'+w+'_'+h;if(!SVG_CACHE[k])SVG_CACHE[k]=partSVG(cat,w,h);return SVG_CACHE[k];}
+function getCarImg(w,h,color,name){const k='c_'+w+'_'+h+'_'+name;if(!SVG_CACHE[k])SVG_CACHE[k]=carFallbackSVG(w,h,color,name);return SVG_CACHE[k];}
+
+const WIKI_IMG_CACHE={};
+const WIKI_PENDING={};
+async function fetchWikiCarImage(brand,model,year){
+  const key=brand+'|'+model+'|'+year;
+  if(WIKI_IMG_CACHE[key])return WIKI_IMG_CACHE[key];
+  if(WIKI_PENDING[key])return WIKI_PENDING[key];
+  const query=`${brand} ${model} ${year}`.trim();
+  const api=`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent('filetype:bitmap '+query)}&gsrnamespace=6&gsrlimit=3&prop=imageinfo&iiprop=url&iiurlwidth=800&format=json&origin=*`;
+  const promise=fetch(api).then(r=>r.json()).then(data=>{
+    const pages=data.query&&data.query.pages;if(!pages)return null;
+    for(const page of Object.values(pages)){
+      const info=page.imageinfo&&page.imageinfo[0];
+      if(info&&info.thumburl){WIKI_IMG_CACHE[key]=info.thumburl;return info.thumburl;}
+    }
+    return null;
+  }).catch(()=>null).finally(()=>{delete WIKI_PENDING[key];});
+  WIKI_PENDING[key]=promise;
+  return promise;
+}
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry32(20250501);
+
+function roundPrice(p){
+  if(p>=200000)return Math.round(p/5000)*5000;
+  if(p>=50000)return Math.round(p/1000)*1000;
+  if(p>=10000)return Math.round(p/500)*500;
+  if(p>=1000)return Math.round(p/100)*100;
+  return Math.max(100,Math.round(p/10)*10);
+}
+function makeArticle(){const L='ABCDEFGHJKLMNPRSTUVWXYZ';return L[Math.floor(rnd()*L.length)]+L[Math.floor(rnd()*L.length)]+'-'+String(Math.floor(rnd()*900000)+100000);}
+
+const products=[];
+BRANDS.forEach(brand=>{
+  CATALOG.forEach(cat=>{
+    cat.parts.forEach(part=>{
+      const base=part.p[0]+rnd()*(part.p[1]-part.p[0]);
+      const price=roundPrice(base*brand.tier*(1.15+rnd()*0.3)*DISCOUNT);
+      const model=brand.models[Math.floor(rnd()*brand.models.length)];
+      products.push({id:brand.n+'|'+model+'|'+cat.id+'|'+part.n,brand:brand.n,model:model,category:cat.id,categoryName:cat.name,name:part.n,price:price,article:makeArticle(),stock:rnd()>0.14,warranty:Math.random()>.5?'24 месяца':'12 месяцев'});
+    });
+  });
+});
+const byId=new Map(products.map(p=>[p.id,p]));
+const fmt=n=>n.toLocaleString('ru-RU')+' ₽';
+
+const CARS_RAW = [
+  {name:'Lada Vesta',year:2019,price:585000,mileage:'78 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Один владелец, полное ТО у дилера, без ДТП.',color:'#5b8fd4'},
+  {name:'Kia Rio',year:2018,price:595000,mileage:'96 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Комплект Premium, зимняя резина в подарок.',color:'#d8d8d8'},
+  {name:'Hyundai Solaris',year:2017,price:549000,mileage:'112 000 км',engine:'1.4 бензин',trans:'АКПП',note:'Обслуживание по регламенту, не битый.',color:'#3f7fbf'},
+  {name:'Renault Logan',year:2019,price:495000,mileage:'84 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Экономичный, идеален для такси и города.',color:'#b04a3c'},
+  {name:'Volkswagen Polo',year:2016,price:525000,mileage:'128 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Полная история обслуживания, 2 комплекта колёс.',color:'#2f2f38'},
+  {name:'Ford Focus',year:2015,price:480000,mileage:'141 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Кузов в отличном состоянии, салон чистый.',color:'#8fa3b8'},
+  {name:'Nissan Almera',year:2017,price:455000,mileage:'119 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Надёжный атмосферник, не требует вложений.',color:'#c6c9cf'},
+  {name:'Chevrolet Cruze',year:2014,price:430000,mileage:'156 000 км',engine:'1.8 бензин',trans:'АКПП',note:'Комплект LT, кожаный салон, климат-контроль.',color:'#4a5f7a'},
+  {name:'Skoda Fabia',year:2016,price:470000,mileage:'103 000 км',engine:'1.2 турбо',trans:'МКПП',note:'Маленький расход, отличная шумоизоляция.',color:'#5f9e6e'},
+  {name:'Toyota Corolla',year:2012,price:590000,mileage:'178 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Легендарная надёжность, всё ТО пройдено.',color:'#8c8c94'},
+  {name:'Mazda 3',year:2011,price:520000,mileage:'165 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Ухоженный кузов, без коррозии, полный комплект.',color:'#b4322f'},
+  {name:'Lada Granta',year:2021,price:520000,mileage:'42 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Практически новая, на гарантии до 2026 года.',color:'#c9cdd4'},
+  {name:'Hyundai Creta',year:2018,price:598000,mileage:'87 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Кроссовер в базовой комплектации, без ДТП.',color:'#5c7a8a'},
+  {name:'Kia Sportage',year:2015,price:590000,mileage:'132 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Полный привод, кожаный салон, панорама.',color:'#7a5c5c'},
+  {name:'Toyota Camry',year:2010,price:595000,mileage:'198 000 км',engine:'2.4 бензин',trans:'АКПП',note:'Классика бизнес-класса, всё ТО вовремя.',color:'#2a2a2a'},
+  {name:'Nissan Qashqai',year:2014,price:575000,mileage:'145 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Ухоженный кроссовер, зимняя резина в подарок.',color:'#8a8c5c'},
+  {name:'Volkswagen Golf',year:2013,price:560000,mileage:'156 000 км',engine:'1.4 турбо',trans:'МКПП',note:'Немецкое качество, полная история обслуживания.',color:'#3a4a5a'},
+  {name:'Ford Kuga',year:2015,price:585000,mileage:'128 000 км',engine:'1.6 турбо',trans:'АКПП',note:'Кроссовер с полным приводом, без ДТП.',color:'#4a6a5a'},
+  {name:'Renault Duster',year:2018,price:555000,mileage:'92 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Настоящий внедорожник для города и дачи.',color:'#8a7a5c'},
+  {name:'Lada XRAY',year:2019,price:498000,mileage:'64 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Свежий хэтчбек, один владелец, гаражное хранение.',color:'#c95c5c'},
+  {name:'Skoda Octavia',year:2014,price:590000,mileage:'178 000 км',engine:'1.8 турбо',trans:'АКПП',note:'Просторный салон, богатая комплектация.',color:'#5a6a8a'},
+  {name:'Hyundai Tucson',year:2016,price:595000,mileage:'134 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Кроссовер с полным приводом, всё ТО.',color:'#3a5a6a'},
+  {name:'Mazda 6',year:2012,price:585000,mileage:'165 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Бизнес-седан, ухоженный салон, без ржавчины.',color:'#6a3a3a'},
+  {name:'Chevrolet Lacetti',year:2011,price:395000,mileage:'189 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Бюджетный седан, надёжный двигатель.',color:'#7a7a8a'},
+  {name:'Kia Ceed',year:2013,price:485000,mileage:'156 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Хэтчбек с экономичным двигателем.',color:'#5a7a5a'},
+  {name:'Toyota RAV4',year:2011,price:598000,mileage:'187 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Кроссовер с полным приводом, всё ТО.',color:'#7a6a4a'},
+  {name:'Nissan X-Trail',year:2012,price:588000,mileage:'165 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Семейный кроссовер, 7 мест, кожаный салон.',color:'#3a4a4a'},
+  {name:'Lada Largus',year:2019,price:530000,mileage:'78 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Универсал, идеален для семьи и бизнеса.',color:'#a0a0a0'},
+  {name:'Opel Astra',year:2013,price:445000,mileage:'167 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Немецкий хэтчбек, кузов без коррозии.',color:'#5a5a7a'},
+  {name:'Mitsubishi ASX',year:2014,price:520000,mileage:'145 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Компактный кроссовер, экономичный двигатель.',color:'#4a5a4a'},
+  {name:'Peugeot 408',year:2014,price:475000,mileage:'156 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Просторный седан, комфортная подвеска.',color:'#5a4a4a'},
+  {name:'Honda Civic',year:2012,price:565000,mileage:'178 000 км',engine:'1.8 бензин',trans:'АКПП',note:'Надёжный японец, богатая комплектация.',color:'#3a3a5a'},
+  {name:'Subaru Forester',year:2013,price:595000,mileage:'172 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Полный привод, отличная проходимость.',color:'#4a6a3a'},
+  {name:'Mitsubishi Outlander',year:2012,price:585000,mileage:'185 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Семейный кроссовер, 7 мест, полный привод.',color:'#5a7a7a'},
+  {name:'Suzuki Grand Vitara',year:2011,price:520000,mileage:'195 000 км',engine:'2.0 бензин',trans:'МКПП',note:'Настоящий внедорожник, не боится бездорожья.',color:'#6a5a3a'},
+  {name:'Kia Sorento',year:2013,price:598000,mileage:'168 000 км',engine:'2.4 бензин',trans:'АКПП',note:'Большой семейный кроссовер, 7 мест.',color:'#4a4a6a'},
+  {name:'Hyundai Santa Fe',year:2012,price:595000,mileage:'189 000 км',engine:'2.4 бензин',trans:'АКПП',note:'Полный привод, кожаный салон, панорама.',color:'#3a5a4a'},
+  {name:'Volkswagen Tiguan',year:2013,price:590000,mileage:'156 000 км',engine:'1.4 турбо',trans:'МКПП',note:'Немецкий кроссовер, полный привод.',color:'#4a5a6a'},
+  {name:'Nissan Juke',year:2013,price:485000,mileage:'145 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Стильный компактный кроссовер.',color:'#7a5a4a'},
+  {name:'Renault Sandero',year:2018,price:445000,mileage:'96 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Экономичный хэтчбек, идеален для города.',color:'#5a7a5a'},
+  {name:'Lada Niva',year:2017,price:490000,mileage:'87 000 км',engine:'1.7 бензин',trans:'МКПП',note:'Настоящий внедорожник, легендарная проходимость.',color:'#6a6a4a'},
+  {name:'Dacia Duster',year:2016,price:510000,mileage:'134 000 км',engine:'1.6 бензин',trans:'МКПП',note:'Бюджетный кроссовер, экономичный двигатель.',color:'#7a6a5a'},
+  {name:'Fiat Albea',year:2012,price:355000,mileage:'189 000 км',engine:'1.4 бензин',trans:'МКПП',note:'Простой и надёжный седан для города.',color:'#5a5a5a'},
+  {name:'Kia Cerato',year:2014,price:535000,mileage:'156 000 км',engine:'1.6 бензин',trans:'АКПП',note:'Просторный седан, богатая комплектация.',color:'#6a4a4a'},
+  {name:'Honda CR-V',year:2011,price:575000,mileage:'198 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Кроссовер с полным приводом, всё ТО.',color:'#4a6a5a'},
+  {name:'Toyota Highlander',year:2012,price:598000,mileage:'189 000 км',engine:'2.7 бензин',trans:'АКПП',note:'Большой семейный кроссовер, 7 мест.',color:'#3a4a5a'},
+  {name:'Mazda CX-5',year:2013,price:590000,mileage:'167 000 км',engine:'2.0 бензин',trans:'АКПП',note:'Стильный кроссовер, полный привод.',color:'#8a3a3a'}
+];
+const CARS=CARS_RAW.map(c=>({...c,price:Math.round(c.price*DISCOUNT/1000)*1000,image:getCarImg(800,500,c.color,c.name),imageBig:getCarImg(1000,650,c.color,c.name)}));
+
+const state={tab:'parts',q:'',brand:'all',model:'all',category:'all',sort:'popular',page:1,perPage:24,currentProduct:null,productQty:1};
+
+let cart=[];
+try{cart=JSON.parse(localStorage.getItem('apppro_cart')||'[]');}catch(e){cart=[];}
+if(!Array.isArray(cart))cart=[];
+cart=cart.filter(i=>i&&byId.has(i.id));
+function saveCart(){try{localStorage.setItem('apppro_cart',JSON.stringify(cart));}catch(e){}}
+
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const grid=$('#parts-grid');
+
+BRANDS.forEach(b=>{const o=document.createElement('option');o.value=b.n;o.textContent=b.n;$('#f-brand').appendChild(o);});
+CATALOG.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;$('#f-category').appendChild(o);});
+
+function fillModels(){
+  const sel=$('#f-model');
+  const models=state.brand==='all'?[...new Set(BRANDS.flatMap(b=>b.models))].sort((a,b)=>a.localeCompare(b,'ru')):(BRANDS.find(b=>b.n===state.brand)?.models||[]);
+  sel.innerHTML='<option value="all">Все модели</option>'+models.map(m=>`<option value="${m}">${m}</option>`).join('');
+  sel.value='all';state.model='all';
+}
+
+function getFiltered(){
+  let list=products;
+  if(state.q){const q=state.q.toLowerCase();list=list.filter(p=>(p.brand+' '+p.model+' '+p.name+' '+p.article).toLowerCase().includes(q));}
+  if(state.brand!=='all')list=list.filter(p=>p.brand===state.brand);
+  if(state.model!=='all')list=list.filter(p=>p.model===state.model);
+  if(state.category!=='all')list=list.filter(p=>p.category===state.category);
+  if(state.sort==='price-asc')list=list.slice().sort((a,b)=>a.price-b.price);
+  if(state.sort==='price-desc')list=list.slice().sort((a,b)=>b.price-a.price);
+  if(state.sort==='name')list=list.slice().sort((a,b)=>a.name.localeCompare(b.name,'ru'));
+  return list;
+}
+
+function cardHTML(p){
+  return `<article class="card" data-product="${p.id}">
+    <div class="card-media">
+      <span class="card-tag ${p.stock?'':'order'}">${p.stock?'В наличии':'Под заказ'}</span>
+      <span class="card-tag original">ORIGINAL</span>
+      <img src="${getPartImg(p.category,600,400)}" alt="${p.brand} ${p.model} — ${p.name}">
+      <div class="card-view"><span>Подробнее →</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-brand">${p.brand} · ${p.model}</div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-meta">Арт. ${p.article} · ${p.categoryName}</div>
+      <div class="card-foot">
+        <div class="card-price">${fmt(p.price)}</div>
+        <button class="add-btn" data-add="${p.id}" onclick="event.stopPropagation();addToCart('${p.id}')">В корзину</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderParts(){
+  const list=getFiltered();
+  const shown=list.slice(0,state.page*state.perPage);
+  grid.innerHTML=shown.length?shown.map(cardHTML).join(''):'<div class="empty">По вашему запросу ничего не найдено.<br>Попробуйте изменить фильтры.</div>';
+  $('#parts-count').textContent=list.length.toLocaleString('ru-RU');
+  $('#load-more').style.display=shown.length<list.length?'block':'none';
+}
+
+function showProduct(id){
+  const p=byId.get(id);if(!p)return;
+  state.currentProduct=p;state.productQty=1;
+  const related=products.filter(x=>x.category===p.category&&x.id!==p.id).slice(0,4);
+  $('#product-body').innerHTML=`
+    <div class="product-page">
+      <div class="product-gallery">
+        <div class="product-main-img"><img src="${getPartImg(p.category,1000,750)}" alt="${p.brand} ${p.model} — ${p.name}"></div>
+        <div class="product-badge ${p.stock?'in':'order'}">${p.stock?'✓ В наличии':'⏳ Под заказ'}</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">${p.categoryName} · Оригинал</div>
+        <h1>${p.name}</h1>
+        <div class="product-art">Бренд: <b>${p.brand}</b> · Модель: <b>${p.model}</b> · Артикул: ${p.article}</div>
+        <div class="product-price">${fmt(p.price)}</div>
+        <div class="product-price-old">${fmt(Math.round(p.price*1.15/100)*100)}</div>
+        <div class="product-desc">${p.name} — оригинальная деталь ${p.brand} для модели ${p.model}. Поставляется напрямую от производителя, с гарантией ${p.warranty.toLowerCase()}. Перед установкой рекомендуется проконсультироваться с менеджером для проверки совместимости с вашей модификацией.</div>
+        <div class="product-specs">
+          <div class="spec-row"><span>Тип</span><b>Оригинал (OEM)</b></div>
+          <div class="spec-row"><span>Марка</span><b>${p.brand}</b></div>
+          <div class="spec-row"><span>Модель</span><b>${p.model}</b></div>
+          <div class="spec-row"><span>Категория</span><b>${p.categoryName}</b></div>
+          <div class="spec-row"><span>Артикул</span><b>${p.article}</b></div>
+          <div class="spec-row"><span>Наличие</span><b>${p.stock?'На складе':'Под заказ, 3–7 дней'}</b></div>
+          <div class="spec-row"><span>Гарантия</span><b>${p.warranty}</b></div>
+        </div>
+        <div class="product-actions">
+          <div class="product-qty"><button onclick="changeProductQty(-1)">−</button><span id="pq-value">1</span><button onclick="changeProductQty(1)">+</button></div>
+          <button class="buy-btn" onclick="addProductToCart()">🛒 Добавить в корзину</button>
+        </div>
+        <div class="tg-note"><span>✈️</span><div>Оформление и оплата — через менеджера в Telegram. Он подтвердит совместимость, наличие и сроки доставки.</div></div>
+      </div>
+    </div>
+    ${related.length?`<div class="section-head" style="margin-top:44px"><h2>Похожие оригинальные запчасти</h2></div><div class="grid">${related.map(cardHTML).join('')}</div>`:''}
+  `;
+  switchTab('product');
+}
+
+function changeProductQty(delta){
+  state.productQty=Math.max(1,state.productQty+delta);
+  $('#pq-value').textContent=state.productQty;
+}
+
+function addProductToCart(){
+  if(!state.currentProduct)return;
+  const id=state.currentProduct.id;
+  const found=cart.find(i=>i.id===id);
+  if(found)found.qty+=state.productQty;
+  else cart.push({id,qty:state.productQty});
+  saveCart();updateBadge();
+  toast(`Добавлено ${state.productQty} шт в корзину`);
+}
+
+function renderCars(){
+  const gridEl=$('#cars-grid');
+  gridEl.innerHTML=CARS.map((c,i)=>`
+    <article class="car-card" data-car="${i}">
+      <div class="car-media">
+        <span class="car-year">${c.year}</span>
+        <img id="car-img-${i}" src="${c.image}" alt="${c.name}">
+      </div>
+      <div class="car-body">
+        <div class="car-title">${c.name}</div>
+        <div class="car-specs">
+          <span class="chip">${c.engine}</span>
+          <span class="chip">${c.trans}</span>
+          <span class="chip">${c.mileage}</span>
+        </div>
+        <div class="car-note">${c.note}</div>
+        <div class="car-foot">
+          <div class="car-price">${fmt(c.price)}</div>
+          <button class="car-btn" onclick="event.stopPropagation();openCarContact(${i})">Связаться</button>
+        </div>
+      </div>
+    </article>`).join('');
+
+  CARS.forEach((c,i)=>{
+    const parts=c.name.split(' ');
+    const brand=parts[0];
+    const model=parts.slice(1).join(' ');
+    fetchWikiCarImage(brand,model,c.year).then(url=>{
+      if(url){const img=document.getElementById('car-img-'+i);if(img)img.src=url;}
+    });
+  });
+}
+
+function updateBadge(){
+  const qty=cart.reduce((s,i)=>s+i.qty,0);
+  const badge=$('#cart-badge');
+  badge.textContent=qty;
+  badge.style.display=qty?'grid':'none';
+}
+
+function cartTotals(){
+  const items=cart.reduce((s,i)=>s+i.qty,0);
+  const sum=cart.reduce((s,i)=>s+byId.get(i.id).price*i.qty,0);
+  return {items,sum};
+}
+
+function renderCartPage(){
+  const body=$('#cart-page-body');
+  updateBadge();
+  if(!cart.length){
+    $('#cart-count-label').textContent='';
+    body.innerHTML=`<div class="cart-empty"><div>🛒</div><h3>Корзина пока пуста</h3><p>Добавьте оригинальные запчасти из каталога, чтобы оформить заказ</p><a onclick="switchTab('parts')">Перейти в каталог</a></div>`;
+    return;
+  }
+  const t=cartTotals();
+  $('#cart-count-label').textContent=`${t.items} ${plural(t.items,'товар','товара','товаров')}`;
+  body.innerHTML=`<div class="cart-page">
+    <div class="cart-list">
+      <div class="cart-list-head"><h3>Товары в корзине</h3><span>${t.items} ${plural(t.items,'позиция','позиции','позиций')}</span></div>
+      <div class="cart-rows">
+        ${cart.map(i=>{const p=byId.get(i.id);return `<div class="cart-row">
+          <div class="cart-row-img" onclick="showProduct('${i.id}')"><img src="${getPartImg(p.category,200,200)}" alt="${p.name}"></div>
+          <div class="cart-row-info">
+            <div class="cart-row-brand">${p.brand} · ${p.model}</div>
+            <div class="cart-row-name" onclick="showProduct('${i.id}')">${p.name}</div>
+            <div class="cart-row-meta">Арт. ${p.article} · ${p.categoryName} · Оригинал</div>
+            <div class="cart-row-controls">
+              <div class="qty-box"><button data-qty="-1" data-id="${i.id}">−</button><span>${i.qty}</span><button data-qty="1" data-id="${i.id}">+</button></div>
+              <button class="cart-row-remove" data-del="${i.id}">Удалить</button>
+            </div>
+          </div>
+          <div class="cart-row-price">${fmt(p.price*i.qty)}<small>${fmt(p.price)} / шт</small></div>
+        </div>`;}).join('')}
+      </div>
+    </div>
+    <aside class="cart-summary">
+      <h3>Итого</h3>
+      <div class="summary-line"><span>Товаров</span><b>${t.items} шт</b></div>
+      <div class="summary-line"><span>Стоимость</span><b>${fmt(t.sum)}</b></div>
+      <div class="summary-line"><span>Доставка</span><b>Рассчитает менеджер</b></div>
+      <div class="summary-total"><span>К оплате</span><b>${fmt(t.sum)}</b></div>
+      <button class="checkout-btn" onclick="showCheckoutForm()">Оформить заказ</button>
+      <div class="checkout-hint">Оплата и подтверждение — через менеджера в Telegram</div>
+    </aside>
+  </div>`;
+}
+
+function plural(n,one,few,many){const m10=n%10,m100=n%100;if(m10===1&&m100!==11)return one;if(m10>=2&&m10<=4&&(m100<10||m100>=20))return few;return many;}
+
+function showCheckoutForm(){
+  if(!cart.length){toast('Корзина пуста');return;}
+  const t=cartTotals();
+  $('#cart-page-body').innerHTML=`<div class="checkout-grid">
+    <div class="form-card">
+      <h3>Данные для заказа</h3>
+      <p class="sub">Заполните форму — менеджер свяжется с вами в Telegram и подтвердит заказ.</p>
+      <div class="form-row">
+        <div class="form-field"><label>Ваше имя *</label><input type="text" id="co-name" placeholder="Иван" autocomplete="name"></div>
+        <div class="form-field"><label>Telegram для связи *</label><input type="text" id="co-tg" placeholder="@username" autocomplete="off"></div>
+      </div>
+      <div class="form-row full"><div class="form-field"><label>Способ доставки</label><select id="co-delivery"><option>Самовывоз</option><option>Курьер по городу</option><option>Транспортная компания</option></select></div></div>
+      <div class="form-row full"><div class="form-field"><label>Адрес доставки (если нужна)</label><input type="text" id="co-address" placeholder="Город, улица, дом, квартира"></div></div>
+      <div class="form-row full"><div class="form-field"><label>Комментарий к заказу</label><textarea id="co-comment" placeholder="Например: уточните сроки поставки оригинальной детали…"></textarea></div></div>
+      <div class="form-note"><span>✈️</span><div>После отправки откроется Telegram с готовым текстом заказа. Менеджер подтвердит наличие оригинала и пришлёт реквизиты для оплаты.</div></div>
+      <button class="place-order" onclick="submitOrder()">✈️ Отправить заказ в Telegram</button>
+      <button class="btn-ghost" style="margin-top:10px;width:100%" onclick="renderCartPage()">← Вернуться в корзину</button>
+    </div>
+    <aside class="cart-summary">
+      <h3>Ваш заказ</h3>
+      <div class="mini-list">
+        ${cart.map(i=>{const p=byId.get(i.id);return `<div class="mini-item"><img src="${getPartImg(p.category,100,100)}" alt="${p.name}"><div class="mini-item-info"><div class="mini-item-name">${p.brand} · ${p.name}</div><div class="mini-item-qty">${i.qty} × ${fmt(p.price)}</div></div><div class="mini-item-price">${fmt(p.price*i.qty)}</div></div>`;}).join('')}
+      </div>
+      <div class="summary-total"><span>Итого</span><b>${fmt(t.sum)}</b></div>
+      <div class="checkout-hint">Оплата и подтверждение — через менеджера в Telegram</div>
+    </aside>
+  </div>`;
+}
+
+function submitOrder(){
+  const name=$('#co-name').value.trim();
+  const tg=$('#co-tg').value.trim();
+  if(!name){toast('Укажите имя');$('#co-name').focus();return;}
+  if(!tg){toast('Укажите Telegram');$('#co-tg').focus();return;}
+  const delivery=$('#co-delivery').value;
+  const address=$('#co-address').value.trim();
+  const comment=$('#co-comment').value.trim();
+  const t=cartTotals();
+  const lines=cart.map((i,idx)=>{const p=byId.get(i.id);return `${idx+1}. ${p.brand} ${p.model} — ${p.name} (арт. ${p.article}, ОРИГИНАЛ) × ${i.qty} = ${fmt(p.price*i.qty)}`;});
+  let text='Здравствуйте! Хочу оформить заказ оригинальных запчастей на AutoParts Pro:\n\n';
+  text+=lines.join('\n');
+  text+=`\n\nИтого: ${fmt(t.sum)}`;
+  text+=`\n\n--- Данные заказа ---`;
+  text+=`\nИмя: ${name}`;
+  text+=`\nTelegram: ${tg}`;
+  text+=`\nДоставка: ${delivery}`;
+  if(address)text+=`\nАдрес: ${address}`;
+  if(comment)text+=`\nКомментарий: ${comment}`;
+  text+='\n\nПодскажите, пожалуйста, наличие оригинала, сроки доставки и реквизиты для оплаты.';
+  const tgLink=CONFIG.telegram+'?text='+encodeURIComponent(text);
+  openModal(`
+    <div class="success-icon">✅</div>
+    <h3 style="text-align:center;padding:0">Заказ сформирован</h3>
+    <p class="modal-sub" style="text-align:center">Скопируйте текст заказа и отправьте менеджеру в Telegram — он подтвердит наличие оригинала и пришлёт реквизиты для оплаты.</p>
+    <textarea id="order-text" readonly></textarea>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="copy-order">📋 Скопировать</button>
+      <a class="btn-primary" href="${tgLink}" target="_blank" rel="noopener" onclick="afterOrderSent()">✈️ Открыть Telegram</a>
+    </div>
+  `);
+  const ta=$('#order-text');
+  ta.value=text;
+  $('#copy-order').onclick=()=>{
+    ta.select();ta.setSelectionRange(0,99999);
+    const done=()=>toast('Заказ скопирован');
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(()=>{document.execCommand('copy');done();});}
+    else{document.execCommand('copy');done();}
+  };
+}
+
+function afterOrderSent(){toast('Отлично! Менеджер ответит в Telegram');}
+
+function addToCart(id){
+  const found=cart.find(i=>i.id===id);
+  if(found)found.qty++;
+  else cart.push({id,qty:1});
+  saveCart();updateBadge();
+  if(state.tab==='cart')renderCartPage();
+  toast('Товар добавлен в корзину');
+}
+function changeQty(id,delta){
+  const item=cart.find(i=>i.id===id);
+  if(!item)return;
+  item.qty+=delta;
+  if(item.qty<=0)cart=cart.filter(i=>i.id!==id);
+  saveCart();renderCartPage();
+}
+function removeItem(id){
+  cart=cart.filter(i=>i.id!==id);
+  saveCart();renderCartPage();
+  toast('Товар удалён');
+}
+
+let toastTimer;
+function toast(msg){
+  const t=$('#toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function openModal(html){$('#modal-body').innerHTML=html;$('#modal').classList.add('show');}
+function closeModal(){$('#modal').classList.remove('show');}
+
+function openCarContact(idx){
+  const c=CARS[idx];
+  const text=`Здравствуйте! Интересует автомобиль ${c.name}, ${c.year} г., ${c.mileage}, ${c.engine}, ${c.trans}. Цена ${fmt(c.price)}. Подскажите подробности и возможность осмотра.`;
+  const tgLink=CONFIG.telegram+'?text='+encodeURIComponent(text);
+  openModal(`
+    <div class="modal-img" id="car-modal-img"><img src="${c.imageBig}" alt="${c.name}"></div>
+    <h3>${c.name}, ${c.year}</h3>
+    <p class="modal-sub">Автомобиль с пробегом</p>
+    <div class="info-line"><span>Цена</span><b>${fmt(c.price)}</b></div>
+    <div class="info-line"><span>Пробег</span><b>${c.mileage}</b></div>
+    <div class="info-line"><span>Двигатель</span><b>${c.engine}</b></div>
+    <div class="info-line"><span>Коробка</span><b>${c.trans}</b></div>
+    <p class="modal-sub" style="margin:16px 0 0">${c.note}</p>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="copy-car">📋 Скопировать запрос</button>
+      <a class="btn-primary" href="${tgLink}" target="_blank" rel="noopener">✈️ Написать в Telegram</a>
+    </div>
+  `);
+  const parts=c.name.split(' ');
+  const brand=parts[0];
+  const model=parts.slice(1).join(' ');
+  fetchWikiCarImage(brand,model,c.year).then(url=>{
+    if(url){const modalImg=document.querySelector('#car-modal-img img');if(modalImg)modalImg.src=url;}
+  });
+  $('#copy-car').onclick=()=>{
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>toast('Скопировано')).catch(()=>toast('Не удалось скопировать'));}
+    else{toast('Скопируйте текст вручную');}
+  };
+}
+
+function switchTab(tab){
+  state.tab=tab;
+  $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  $('#view-parts').style.display=tab==='parts'?'block':'none';
+  $('#view-product').style.display=tab==='product'?'block':'none';
+  $('#view-cars').style.display=tab==='cars'?'block':'none';
+  $('#view-cart').style.display=tab==='cart'?'block':'none';
+  $('#view-contacts').style.display=tab==='contacts'?'block':'none';
+  $('#hero').style.display=tab==='parts'?'block':'none';
+  if(tab==='cart')renderCartPage();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+$$('[data-jump]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();switchTab(a.dataset.jump);}));
+
+$('#f-search').addEventListener('input',e=>{state.q=e.target.value.trim();state.page=1;renderParts();});
+$('#f-brand').addEventListener('change',e=>{state.brand=e.target.value;fillModels();state.page=1;renderParts();});
+$('#f-model').addEventListener('change',e=>{state.model=e.target.value;state.page=1;renderParts();});
+$('#f-category').addEventListener('change',e=>{state.category=e.target.value;state.page=1;renderParts();});
+$('#f-sort').addEventListener('change',e=>{state.sort=e.target.value;state.page=1;renderParts();});
+$('#load-more').addEventListener('click',()=>{state.page++;renderParts();});
+
+grid.addEventListener('click',e=>{
+  const addBtn=e.target.closest('[data-add]');
+  if(addBtn)return;
+  const card=e.target.closest('[data-product]');
+  if(card)showProduct(card.dataset.product);
+});
+
+$('#cars-grid').addEventListener('click',e=>{
+  const btn=e.target.closest('.car-btn');
+  if(btn)return;
+  const card=e.target.closest('[data-car]');
+  if(card)openCarContact(Number(card.dataset.car));
+});
+
+$('#cart-page-body').addEventListener('click',e=>{
+  const q=e.target.closest('[data-qty]');
+  if(q){changeQty(q.dataset.id,Number(q.dataset.qty));return;}
+  const d=e.target.closest('[data-del]');
+  if(d)removeItem(d.dataset.del);
+});
+
+$('#header-cart').addEventListener('click',()=>switchTab('cart'));
+$('#modal-close').addEventListener('click',closeModal);
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+$('#stat-parts').textContent=products.length.toLocaleString('ru-RU');
+$('#stat-cars').textContent=CARS.length;
+$('#c-tg').textContent=CONFIG.telegramName;
+$('#c-link').href=CONFIG.telegram;
+$('#f-tg').href=CONFIG.telegram;
+
+fillModels();
+renderParts();
+renderCars();
+updateBadge();
+</script>
+</body>
+</html>
